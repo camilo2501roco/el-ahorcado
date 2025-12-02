@@ -1,147 +1,70 @@
 <template>
-  <q-page class="flex flex-center nivel-page">
-    <div class="container q-pa-md">
-      <h2 class="text-center text-h3 q-mb-md text-weight-bold text-white">
-        Selecciona el Nivel
-      </h2>
+  <q-page class="flex flex-center column" style="z-index: 1;">
+    <div class="container q-pa-md text-center full-width" style="max-width: 900px">
+      <h2 class="text-h3 q-mb-md text-weight-bold">Dificultad</h2>
       
-      <div class="text-center q-mb-xl">
-        <q-chip 
-          v-if="categoriaSeleccionada"
-          color="white" 
-          text-color="primary" 
-          icon="category"
-          size="lg"
-        >
-          Categoría: {{ categoriaSeleccionada.nombre }} {{ categoriaSeleccionada.icono }}
-        </q-chip>
-      </div>
+      <q-chip 
+        v-if="categoria" 
+        color="white" 
+        text-color="primary" 
+        icon="category" 
+        class="q-mb-xl"
+      >
+        {{ categoria.icono }} {{ categoria.nombre }}
+      </q-chip>
 
       <div class="row q-col-gutter-lg justify-center">
-        <div 
-          v-for="nivel in niveles" 
-          :key="nivel.id"
-          class="col-12 col-md-8"
-        >
-          <q-card 
-            class="nivel-card cursor-pointer"
-            @click="seleccionarNivel(nivel)"
-          >
-            <q-card-section class="row items-center">
-              <div class="col-auto q-mr-md">
-                <q-avatar 
-                  :color="nivel.color" 
-                  size="80px"
-                  text-color="white"
-                  class="text-h3"
-                >
-                  {{ nivel.emoji }}
-                </q-avatar>
-              </div>
-              
-              <div class="col">
-                <div class="text-h5 text-weight-bold">{{ nivel.nombre }}</div>
-                <div class="text-grey-7">{{ nivel.descripcion }}</div>
-                <div class="text-caption text-grey-6 q-mt-xs">
-                  {{ nivel.intentos }} intentos
-                </div>
-              </div>
-
-              <div class="col-auto">
-                <q-icon name="chevron_right" size="md" color="grey-6" />
-              </div>
+        <div v-for="niv in NIVELES" :key="niv.id" class="col-12 col-md-4">
+          <q-card class="nivel-card cursor-pointer" @click="seleccionar(niv)">
+            <q-card-section>
+              <div class="text-h2">{{ niv.emoji }}</div>
+              <div class="text-h5 text-weight-bold">{{ niv.nombre }}</div>
+              <div class="text-caption text-grey-3">{{ niv.descripcion }}</div>
+              <q-badge :color="niv.color" class="q-mt-sm">{{ niv.intentos }} intentos</q-badge>
             </q-card-section>
           </q-card>
         </div>
       </div>
 
-      <div class="text-center q-mt-xl">
-        <q-btn 
-          color="white" 
-          text-color="primary"
-          label="Volver a categorías" 
-          to="/categoria"
-          size="md"
-          rounded
-          outline
-        />
-      </div>
+      <q-btn class="q-mt-xl" color="white" outline label="Cambiar Categoría" to="/categoria" rounded />
     </div>
   </q-page>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useJuego } from '../composables/useJuego';
+import { NIVELES } from '../data/juegoData';
 
 const router = useRouter();
-const categoriaSeleccionada = ref(null);
 
-const niveles = ref([
-  {
-    id: 1,
-    nombre: 'Fácil',
-    emoji: '😊',
-    descripcion: 'Palabras de 4-6 letras',
-    intentos: 6,  // ← 6 intentos (todas las partes del cuerpo)
-    color: 'green',
-    dificultad: 'facil'
-  },
-  {
-    id: 2,
-    nombre: 'Medio',
-    emoji: '😐',
-    descripcion: 'Palabras de 7-9 letras',
-    intentos: 5,  // ← 5 intentos
-    color: 'orange',
-    dificultad: 'medio'
-  },
-  {
-    id: 3,
-    nombre: 'Difícil',
-    emoji: '😤',
-    descripcion: 'Palabras de 10+ letras',
-    intentos: 4,  // ← 4 intentos
-    color: 'red',
-    dificultad: 'dificil'
-  }
-]);
 
-onMounted(() => {
-  const categoria = sessionStorage.getItem('categoriaSeleccionada');
-  if (categoria) {
-    categoriaSeleccionada.value = JSON.parse(categoria);
-  } else {
+const { categoria, setNivel } = useJuego();
+
+onMounted(() => { 
+
+  if (!categoria.value) {
     router.push('/categoria');
   }
 });
 
-const seleccionarNivel = (nivel) => {
-  sessionStorage.setItem('nivelSeleccionado', JSON.stringify(nivel));
+const seleccionar = (nivel) => {
+  setNivel(nivel);
   router.push('/juego');
 };
 </script>
 
 <style scoped>
-.nivel-page {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-}
-
-.container {
-  max-width: 900px;
-  width: 100%;
-}
-
 .nivel-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
   border-radius: 15px;
-  transition: all 0.3s ease;
-  border-left: 5px solid transparent;
+  transition: all 0.3s;
+  color: white;
 }
-
 .nivel-card:hover {
-  transform: translateX(10px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  border-left-color: #667eea;
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.25);
 }
 </style>

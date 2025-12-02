@@ -1,21 +1,21 @@
-
-import Categoria from "../views/Categoria.vue";
-import Juego from "../views/Juego.vue";
+import { createRouter, createWebHashHistory } from "vue-router";
 import Intro from "../views/Intro.vue";
-import Nivel from "../views/Nivel.vue";
 import Login from "../views/Login.vue";
-import { createRouter,createWebHashHistory } from "vue-router";
+import Categoria from "../views/Categoria.vue";
+import Nivel from "../views/Nivel.vue";
+import Juego from "../views/Juego.vue";
+import Ranking from "../views/Ranking.vue";
 
-
-const routes =[
-    {path: "/juego", component:Juego},
-   {path: "/nivel", component:Nivel},
-   {path:"/login", component:Login},
-    {path: "/categoria", component:Categoria},
-      {path:"/",component:Intro}
-]
+const routes = [
+    { path: "/", component: Intro },
+    { path: "/login", component: Login },
+    { path: "/categoria", component: Categoria },
+    { path: "/nivel", component: Nivel },
+    { path: "/juego", component: Juego },
+    { path: "/ranking", component: Ranking }
+];
 
 export const router = createRouter({
-    history:createWebHashHistory(),
+    history: createWebHashHistory(),
     routes
-})
+});
