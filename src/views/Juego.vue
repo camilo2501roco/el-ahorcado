@@ -14,19 +14,13 @@
         <q-chip :color="nivel?.color" text-color="white">Vidas: {{ intentosRestantes }}</q-chip>
       </div>
 
-      <div class="q-mb-lg">
-        <svg width="200" height="200" viewBox="0 0 300 300">
-          <line x1="20" y1="280" x2="150" y2="280" stroke="#fff" stroke-width="4"/>
-          <line x1="60" y1="280" x2="60" y2="20" stroke="#fff" stroke-width="4"/>
-          <line x1="60" y1="20" x2="180" y2="20" stroke="#fff" stroke-width="4"/>
-          <line x1="180" y1="20" x2="180" y2="60" stroke="#fff" stroke-width="3"/>
-          <circle v-if="errores >= 1" cx="180" cy="80" r="20" stroke="#fff" stroke-width="3" fill="none"/>
-          <line v-if="errores >= 2" x1="180" y1="100" x2="180" y2="170" stroke="#fff" stroke-width="3"/>
-          <line v-if="errores >= 3" x1="180" y1="120" x2="150" y2="150" stroke="#fff" stroke-width="3"/>
-          <line v-if="errores >= 4" x1="180" y1="120" x2="210" y2="150" stroke="#fff" stroke-width="3"/>
-          <line v-if="errores >= 5" x1="180" y1="170" x2="160" y2="220" stroke="#fff" stroke-width="3"/>
-          <line v-if="errores >= 6" x1="180" y1="170" x2="200" y2="220" stroke="#fff" stroke-width="3"/>
-        </svg>
+      <div class="q-mb-lg flex flex-center">
+        <img 
+          :src="`/img/ahorcado_${errores}.png`" 
+          :key="errores"
+          alt="Ahorcado"
+          class="imagen-ahorcado"
+        />
       </div>
 
       <div class="row justify-center q-gutter-sm q-mb-xl">
@@ -78,7 +72,6 @@ import { useJuego } from '../composables/useJuego';
 
 const router = useRouter();
 
-// CORRECCIÓN AQUÍ: Agregué 'tiempo' a la lista de extracción
 const { 
   usuario, categoria, nivel, tiempo, 
   agregarPuntaje, iniciarTimer, detenerTimer, 
@@ -114,7 +107,7 @@ const iniciarPartida = () => {
   letrasUsadas.value = [];
   errores.value = 0;
   mostrarDialogo.value = false;
-  iniciarTimer(); // Iniciar reloj
+  iniciarTimer(); 
 };
 
 const intentar = (letra) => {
@@ -122,14 +115,14 @@ const intentar = (letra) => {
   if (!palabraObjetivo.value.includes(letra)) errores.value++;
   
   if (juegoTerminado.value) {
-    detenerTimer(); // Parar reloj inmediatamente
+    detenerTimer(); 
     
     if (juegoGanado.value) {
       agregarPuntaje(100);
       guardarEnRanking();
     }
     
-    // Mostrar diálogo después de 500ms (una sola vez)
+    
     setTimeout(() => {
       mostrarDialogo.value = true;
     }, 500);
@@ -153,5 +146,14 @@ const getTextColorBoton = (letra) => {
   background: white; color: #333;
   font-weight: bold; font-size: 24px;
   border-radius: 8px;
+}
+
+
+.imagen-ahorcado {
+  width: 280px;
+  height: auto;
+  max-width: 100%;
+  filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
+  transition: transform 0.2s ease;
 }
 </style>
