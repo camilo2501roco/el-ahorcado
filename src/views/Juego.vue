@@ -84,13 +84,16 @@ const letrasUsadas = ref([]);
 const errores = ref(0);
 const mostrarDialogo = ref(false);
 
-// Computed
 const palabraArray = computed(() => 
   palabraObjetivo.value.split('').map(l => letrasUsadas.value.includes(l) ? l : '_')
 );
 const intentosRestantes = computed(() => (nivel.value?.intentos || 0) - errores.value);
-const juegoTerminado = computed(() => errores.value >= nivel.value?.intentos || !palabraArray.value.includes('_'));
-const juegoGanado = computed(() => !palabraArray.value.includes('_') && errores.value < nivel.value?.intentos);
+
+
+const juegoTerminado = computed(() => errores.value >= (nivel.value?.intentos || 6) || !palabraArray.value.includes('_'));
+
+
+const juegoGanado = computed(() => !palabraArray.value.includes('_') && errores.value < (nivel.value?.intentos || 6));
 
 onMounted(() => {
   if (!categoria.value || !nivel.value) return router.push('/categoria');
@@ -110,18 +113,30 @@ const iniciarPartida = () => {
   iniciarTimer(); 
 };
 
+
 const intentar = (letra) => {
+  if (mostrarDialogo.value) return;
+
   letrasUsadas.value.push(letra);
-  if (!palabraObjetivo.value.includes(letra)) errores.value++;
+
+  if (!palabraObjetivo.value.includes(letra)) {
+    errores.value++;
+  }
+
+ 
+  const maxIntentos = nivel.value?.intentos || 6;
+  const perdioAhora = errores.value >= maxIntentos;
   
-  if (juegoTerminado.value) {
-    detenerTimer(); 
-    
-    if (juegoGanado.value) {
+  const letrasDeLaPalabra = palabraObjetivo.value.split('');
+  const ganoAhora = letrasDeLaPalabra.every(l => letrasUsadas.value.includes(l));
+
+  if (ganoAhora || perdioAhora) {
+    detenerTimer();
+
+    if (ganoAhora) {
       agregarPuntaje(100);
       guardarEnRanking();
     }
-    
     
     setTimeout(() => {
       mostrarDialogo.value = true;
@@ -147,7 +162,6 @@ const getTextColorBoton = (letra) => {
   font-weight: bold; font-size: 24px;
   border-radius: 8px;
 }
-
 
 .imagen-ahorcado {
   width: 280px;
