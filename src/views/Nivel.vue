@@ -2,15 +2,17 @@
   <q-page class="flex flex-center column" style="z-index: 1;">
     <div class="container q-pa-md text-center full-width" style="max-width: 900px">
       <h2 class="text-h3 q-mb-md text-weight-bold">Dificultad</h2>
-      
+             
       <q-chip 
+      
         v-if="categoria" 
         color="white" 
         text-color="primary" 
-        icon="category" 
+        
         class="q-mb-xl"
       >
-        {{ categoria.icono }} {{ categoria.nombre }}
+
+        {{ categoria.icono }} {{ categoria.nombre }} {{ usuario.nombre }}
       </q-chip>
 
       <div class="row q-col-gutter-lg justify-center">
@@ -40,7 +42,7 @@ import { NIVELES } from '../data/juegoData';
 const router = useRouter();
 
 
-const { categoria, setNivel } = useJuego();
+const { categoria,usuario, setNivel } = useJuego();
 
 onMounted(() => { 
 

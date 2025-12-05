@@ -1,5 +1,16 @@
 <template>
   <q-page class="flex flex-center column" style="z-index: 1;">
+    <q-btn 
+      icon="arrow_back" 
+      flat 
+      round 
+      color="white" 
+      size="lg" 
+      to="/nivel"
+      class="absolute-top-left q-ma-md" 
+    >
+      <q-tooltip>Volver a Nivel</q-tooltip>
+    </q-btn>
     <div class="container q-pa-md full-width text-center" style="max-width: 800px">
       
       <div class="row justify-center q-gutter-md q-mb-lg">
@@ -14,14 +25,13 @@
         <q-chip :color="nivel?.color" text-color="white">Vidas: {{ intentosRestantes }}</q-chip>
       </div>
 
-      <div class="q-mb-lg flex flex-center">
-        <img 
-          :src="`/img/ahorcado_${errores}.png`" 
-          :key="errores"
-          alt="Ahorcado"
-          class="imagen-ahorcado"
-        />
-      </div>
+     <div class="contenedor-dibujo flex flex-center q-mb-lg">
+  <img 
+    :src="`/img/ahorcado_${errores}.png`" 
+    alt="Ahorcado"
+    class="imagen-ahorcado"
+  />
+</div>
 
       <div v-if="pistaActual" class="q-mb-md text-center">
    <q-chip color="primary" text-color="white" icon="lightbulb">
@@ -175,10 +185,16 @@ const getTextColorBoton = (letra) => {
 }
 
 .imagen-ahorcado {
-  width: 280px;
-  height: auto;
+  height: 100%;      
+  width: auto;        
   max-width: 100%;
   filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
   transition: transform 0.2s ease;
+}
+.contenedor-dibujo {
+ 
+  height: 200px; 
+  width: 100%;
+  overflow: hidden; 
 }
 </style>
