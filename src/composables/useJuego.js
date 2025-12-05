@@ -15,7 +15,7 @@ export function useJuego() {
   const nuevoUsuario = { nombre, puntaje: 0 };
     state.usuario = nuevoUsuario;
     
-   c
+   
     localStorage.setItem('jugador_actual', JSON.stringify(nuevoUsuario));
   };
 
@@ -23,13 +23,13 @@ export function useJuego() {
   const setNivel = (niv) => state.nivel = niv;
 
 
-  const agregarPuntaje = (puntos) => {
+ const agregarPuntaje = (puntos) => {
     if (state.usuario) {
       state.usuario.puntaje += puntos;
+     
       localStorage.setItem('jugador_actual', JSON.stringify(state.usuario));
     }
   };
- 
 
   const iniciarTimer = () => {
     detenerTimer(); 
