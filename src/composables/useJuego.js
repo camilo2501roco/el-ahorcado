@@ -1,8 +1,8 @@
 import { reactive, toRefs } from 'vue';
 
-
+const usuarioGuardado = JSON.parse(localStorage.getItem('jugador_actual') || 'null');
 const state = reactive({
-  usuario: null,
+  usuario: usuarioGuardado,
   categoria: null,
   nivel: null,
   tiempo: 0,
@@ -12,7 +12,11 @@ const state = reactive({
 export function useJuego() {
   
   const setUsuario = (nombre) => {
-    state.usuario = { nombre, puntaje: 0 };
+  const nuevoUsuario = { nombre, puntaje: 0 };
+    state.usuario = nuevoUsuario;
+    
+   c
+    localStorage.setItem('jugador_actual', JSON.stringify(nuevoUsuario));
   };
 
   const setCategoria = (cat) => state.categoria = cat;
@@ -22,6 +26,7 @@ export function useJuego() {
   const agregarPuntaje = (puntos) => {
     if (state.usuario) {
       state.usuario.puntaje += puntos;
+      localStorage.setItem('jugador_actual', JSON.stringify(state.usuario));
     }
   };
  

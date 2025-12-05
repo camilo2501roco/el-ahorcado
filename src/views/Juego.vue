@@ -23,6 +23,11 @@
         />
       </div>
 
+      <div v-if="pistaActual" class="q-mb-md text-center">
+   <q-chip color="primary" text-color="white" icon="lightbulb">
+      Pista: {{ pistaActual }}
+   </q-chip>
+</div>
       <div class="row justify-center q-gutter-sm q-mb-xl">
         <div v-for="(letra, i) in palabraArray" :key="i" class="letra-box flex flex-center">
           {{ letra }}
@@ -68,9 +73,10 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useJuego } from '../composables/useJuego';
+import { useJuego } from '../composables/useJuego.js';
 
 const router = useRouter();
+
 
 const { 
   usuario, categoria, nivel, tiempo, 
@@ -83,6 +89,7 @@ const palabraObjetivo = ref('');
 const letrasUsadas = ref([]);
 const errores = ref(0);
 const mostrarDialogo = ref(false);
+const pistaActual = ref('');
 
 const palabraArray = computed(() => 
   palabraObjetivo.value.split('').map(l => letrasUsadas.value.includes(l) ? l : '_')
@@ -106,7 +113,11 @@ onUnmounted(() => {
 
 const iniciarPartida = () => {
   const lista = categoria.value.palabras[nivel.value.dificultad];
-  palabraObjetivo.value = lista[Math.floor(Math.random() * lista.length)];
+  const seleccion = lista[Math.floor(Math.random() * lista.length)];
+
+
+  palabraObjetivo.value = seleccion.palabra; 
+  pistaActual.value = seleccion.pista;       
   letrasUsadas.value = [];
   errores.value = 0;
   mostrarDialogo.value = false;
