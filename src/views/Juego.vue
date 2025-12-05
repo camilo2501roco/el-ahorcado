@@ -84,9 +84,10 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useJuego } from '../composables/useJuego.js';
+import { useSonido } from '../composables/useSonido.js';
 
 const router = useRouter();
-
+const { playAcierto, playError } = useSonido();
 
 const { 
   usuario, categoria, nivel, tiempo, 
@@ -142,6 +143,9 @@ const intentar = (letra) => {
 
   if (!palabraObjetivo.value.includes(letra)) {
     errores.value++;
+    playError();
+  }else{
+    playAcierto();
   }
 
  

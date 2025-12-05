@@ -14,7 +14,7 @@
 
             <thead class="text-yellow">
               <tr>
-                <th class="text-left">Pos</th>
+                <th class="text-left">#</th>
                 <th class="text-left">Jugador</th>
                 <th class="text-right">Puntaje</th>
                 <th class="text-right">Tiempo</th>
@@ -28,7 +28,7 @@
                 <td class="text-left">
                   <q-icon v-if="index=== 0" name="emoji_events"
                   color="yellow" size="sm"/>
-                  <span v-else> #{{ indeex + 1 }}</span>
+                  <span v-else> #{{ index + 1 }}</span>
                 </td>
 
                 <td class="text-left text-weight-bold" >{{ jugador.nombre }}</td>
