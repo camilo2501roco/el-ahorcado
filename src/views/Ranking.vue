@@ -6,7 +6,18 @@
       <h2 class="text-center text-h3 text-weight-bold q-mb-xl">
         🏆 Mejores Jugadores 🏆
       </h2>
-
+<div class="row justify-center q-mb-lg">
+    <q-btn-toggle
+        v-model="dificultadSeleccionada"
+        spread
+        no-caps
+        rounded
+        toggle-color="yellow-8"
+        color="grey-8"
+        text-color="white"
+        :options="NIVELES.map(n => ({ label: n.nombre, value: n.dificultad }))"
+    />
+</div>
 
       <q-card class="ranking-card">
         <q-card-section>
@@ -16,7 +27,8 @@
               <tr>
                 <th class="text-left">#</th>
                 <th class="text-left">Jugador</th>
-                <th class="text-right">Puntaje</th>
+              <th class="text-left">Categoría</th>
+               <th class="text-right">Puntaje</th>
                 <th class="text-right">Tiempo</th>
                 <th class="text-rigth">Fecha</th>
               </tr>
@@ -32,6 +44,7 @@
                 </td>
 
                 <td class="text-left text-weight-bold" >{{ jugador.nombre }}</td>
+                <td class="text-left text-weight-medium text-grey-3">{{ jugador.categoria }}</td>
                 <td class="text-right text-h6 text-green-4">{{ jugador.puntaje }}</td>
              <td class="text-right">{{ formatoTiempo(jugador.tiempo) }}</td>
              <td class="text-right text-grey-4"> {{ jugador.fecha }}</td>
@@ -58,18 +71,26 @@
 
 
 <script setup>
-import { ref,onMounted } from 'vue';
+import { ref,watch } from 'vue';
+import {NIVELES} from '../data/juegoData.js'
 import { useJuego } from '../composables/useJuego';
 const ranking = ref([]);
 const {formatoTiempo} = useJuego();
 
-onMounted(() =>{
-  const data = localStorage.getItem('ahorcado_ranking');
-  if(data){
-    ranking.value = JSON.parse(data);
-  }
-});
 
+const dificultadSeleccionada = ref('facil');
+
+
+const cargarRanking = (dificultad) => {
+    
+    const claveRanking = `ahorcado_ranking_${dificultad}`;
+    const data = localStorage.getItem(claveRanking);
+  
+    ranking.value = data ? JSON.parse(data) : [];
+};
+watch(dificultadSeleccionada, (nuevaDificultad) => {
+    cargarRanking(nuevaDificultad);
+}, { immediate: true }); 
 
 </script>
 

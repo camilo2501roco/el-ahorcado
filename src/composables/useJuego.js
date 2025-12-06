@@ -47,15 +47,20 @@ export function useJuego() {
   };
 
   const guardarEnRanking = () => {
-    const rankingGuardado = JSON.parse(localStorage.getItem('ahorcado_ranking') || '[]');
+
+    if (!state.usuario || !state.nivel || !state.categoria) return;
+
+    const claveRanking = `ahorcado_ranking_${state.nivel.dificultad}`;
+   const rankingGuardado = JSON.parse(localStorage.getItem(claveRanking) || '[]');
     
     
-    if (!state.usuario) return;
+    
 
     const nuevoRegistro = {
       nombre: state.usuario.nombre,
       puntaje: state.usuario.puntaje,
       tiempo: state.tiempo,
+      categoria: state.categoria.nombre,
       fecha: new Date().toLocaleDateString()
     };
 
@@ -66,7 +71,7 @@ export function useJuego() {
     });
 
     const top10 = rankingGuardado.slice(0, 10);
-    localStorage.setItem('ahorcado_ranking', JSON.stringify(top10));
+  localStorage.setItem(claveRanking, JSON.stringify(top10));
   };
 
   const formatoTiempo = (segundos) => {
